@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="fastesttyper.client/fastesttyper.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="FastestTyper.Server/FastestTyper.Server.csproj" />
+</Solution>

@@ -1,0 +1,113 @@
+.leaderboard { flex: 1; padding: 48px 24px; }
+
+.leaderboard-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.lb-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.lb-title {
+  font-size: 2.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #F7F4EF;
+}
+
+.lb-sub { color: #8A9BB0; font-size: 0.9rem; margin-top: 4px; }
+
+/* ── Podium ─────────────────────────────────────────────── */
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.podium-card {
+  text-align: center;
+  padding: 28px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s;
+}
+
+.podium-card:hover { transform: translateY(-4px); }
+
+.podium-1 { border-color: #FFD166; box-shadow: 0 0 30px rgba(255,209,102,0.15); }
+.podium-2 { border-color: #C0C0C0; }
+.podium-3 { border-color: #CD7F32; }
+
+.podium-medal { font-size: 2.2rem; }
+.podium-name  { font-weight: 600; color: #F7F4EF; font-size: 0.95rem; }
+.podium-wpm   {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #FF4D6D;
+  line-height: 1;
+  margin-top: 4px;
+}
+.podium-wpm-label { font-size: 0.72rem; color: #8A9BB0; text-transform: uppercase; letter-spacing: 0.08em; }
+.podium-time  { font-size: 0.82rem; color: #8A9BB0; }
+
+/* ── Table ──────────────────────────────────────────────── */
+.lb-table-wrap { padding: 0; overflow: hidden; }
+
+.lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.lb-table th {
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8A9BB0;
+  padding: 14px 20px;
+  border-bottom: 1px solid #1E3048;
+}
+
+.lb-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #162233;
+  color: #8A9BB0;
+}
+
+.lb-table tr:last-child td { border-bottom: none; }
+
+.lb-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+.top-row td { color: #F7F4EF; }
+
+.rank-cell { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; }
+.name-cell { font-weight: 500; color: #F7F4EF; }
+.wpm-cell  { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; }
+.time-cell { font-variant-numeric: tabular-nums; }
+
+/* ── Note ───────────────────────────────────────────────── */
+.lb-note {
+  font-size: 0.82rem;
+  color: #8A9BB0;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .podium { grid-template-columns: 1fr; }
+  .lb-table th:nth-child(5), .lb-table td:nth-child(5) { display: none; }
+}

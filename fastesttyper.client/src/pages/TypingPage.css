@@ -1,0 +1,218 @@
+.typing-page {
+  flex: 1;
+  padding: 48px 24px;
+}
+
+.typing-inner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.typing-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.typing-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #F7F4EF;
+}
+
+.typing-sub {
+  color: #8A9BB0;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* ── Stats bar ──────────────────────────────────────────── */
+.stats-bar {
+  display: flex;
+  gap: 0;
+  background: #162233;
+  border: 1px solid #1E3048;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.stat-item {
+  flex: 1;
+  padding: 16px;
+  text-align: center;
+  border-right: 1px solid #1E3048;
+}
+.stat-item:last-child { border-right: none; }
+
+.stat-val {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #F7F4EF;
+  line-height: 1;
+}
+
+.stat-lbl {
+  display: block;
+  font-size: 0.72rem;
+  color: #8A9BB0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+/* ── Progress track ─────────────────────────────────────── */
+.progress-track {
+  height: 4px;
+  background: #1E3048;
+  border-radius: 99px;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF4D6D, #FFD166);
+  border-radius: 99px;
+  transition: width 0.1s ease;
+}
+
+/* ── Passage display ────────────────────────────────────── */
+.passage-display {
+  background: #162233;
+  border: 1.5px solid #1E3048;
+  border-radius: 12px;
+  padding: 28px 32px;
+  font-family: 'Inter', monospace;
+  font-size: 1.15rem;
+  line-height: 1.9;
+  letter-spacing: 0.01em;
+  cursor: text;
+  user-select: none;
+  transition: border-color 0.15s;
+  margin-bottom: 16px;
+}
+
+.passage-display:focus-within { border-color: #FF4D6D; }
+
+.char-pending { color: #8A9BB0; }
+.char-correct { color: #F7F4EF; }
+.char-wrong   { color: #FF4D6D; background: rgba(255,77,109,0.18); border-radius: 2px; }
+.char-cursor  { color: #F7F4EF; border-left: 2px solid #FF4D6D; animation: blink 1s step-end infinite; }
+
+/* ── Hidden input (desktop) ─────────────────────────────── */
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.start-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #8A9BB0;
+  padding: 12px;
+  border: 1px dashed #1E3048;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* ── Mobile textarea ────────────────────────────────────── */
+.mobile-input-wrap {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobile-label {
+  font-size: 0.8rem;
+  color: #8A9BB0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.mobile-textarea {
+  width: 100%;
+  background: #0D1B2A;
+  border: 1.5px solid #1E3048;
+  border-radius: 8px;
+  color: #F7F4EF;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  padding: 12px;
+  resize: none;
+  outline: none;
+}
+.mobile-textarea:focus { border-color: #FF4D6D; }
+
+@media (max-width: 640px) {
+  .mobile-input-wrap { display: flex; }
+  .passage-display { font-size: 1rem; padding: 20px; }
+}
+
+/* ── Result card ────────────────────────────────────────── */
+.result-card {
+  text-align: center;
+  padding: 48px 36px;
+}
+
+.result-trophy { font-size: 3.5rem; margin-bottom: 16px; }
+
+.result-title {
+  font-size: 2.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #F7F4EF;
+  margin-bottom: 8px;
+}
+
+.result-sub { color: #8A9BB0; margin-bottom: 32px; }
+
+.result-stats {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.result-stat { text-align: center; }
+
+.result-val {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #F7F4EF;
+}
+
+.result-lbl {
+  display: block;
+  font-size: 0.78rem;
+  color: #8A9BB0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 6px;
+}
+
+.result-note {
+  font-size: 0.9rem;
+  color: #8A9BB0;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.result-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

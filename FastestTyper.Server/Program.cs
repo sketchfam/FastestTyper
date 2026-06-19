@@ -3,6 +3,7 @@ using FastestTyper.Server.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Text.Json;
@@ -22,17 +23,13 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie("Cookies", options =>
 {
-    // Explicit settings so the cookie reliably survives reloads in this
-    // dev setup (Vite proxy on :5173, backend actually on :7185).
     options.Cookie.Name = "FastestTyper.Auth";
     options.Cookie.HttpOnly = true;
     options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // backend is https in dev too
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
     options.SlidingExpiration = true;
 
-    // For an API-driven SPA, return 401/403 instead of redirecting to a login page,
-    // so failed session checks from fetch() don't get a redirect/HTML response.
     options.Events.OnRedirectToLogin = context =>
     {
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -111,6 +108,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Trust Render's load balancer headers so the app knows the original
+// request was HTTPS (Render terminates SSL before the container).
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 app.UseDefaultFiles();
 app.MapStaticAssets();
 
@@ -123,13 +127,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("ViteDev");
-
-// Force HTTPS scheme for OAuth
-app.Use((context, next) =>
-{
-    context.Request.Scheme = "https";
-    return next();
-});
 
 app.UseAuthentication();
 

@@ -16,18 +16,14 @@ export default function App() {
 
     const navigate = (page) => setCurrentPage(page);
 
-    // Check if we're on the auth callback URL
     useEffect(() => {
         if (window.location.pathname === "/auth-callback") {
             setCurrentPage("auth-callback");
         }
     }, []);
 
-    // On initial load (including a hard refresh), try to restore the
-    // session from the auth cookie. Without this, any page reload looks
-    // logged-out even though the cookie/session is still valid server-side.
     useEffect(() => {
-        if (window.location.pathname === "/auth-callback") return; // handled separately
+        if (window.location.pathname === "/auth-callback") return;
         (async () => {
             try {
                 const res = await fetch("/api/auth/me", { credentials: "include" });
@@ -42,9 +38,6 @@ export default function App() {
         })();
     }, []);
 
-    // Pulls the latest user + entries from the database. Call this any time
-    // the dashboard needs to reflect real, persisted state rather than
-    // client-side guesses.
     const refreshUser = async () => {
         try {
             const res = await fetch("/api/auth/me", { credentials: "include" });
@@ -60,7 +53,6 @@ export default function App() {
         setUser(userData);
         window.history.replaceState({}, "", "/");
         setCurrentPage("dashboard");
-        // userData from the callback only has Id/Name/Email — fetch entries too.
         refreshUser();
     };
 
@@ -78,20 +70,14 @@ export default function App() {
         }
     };
 
-    // entry here is the REAL database entry returned by /api/entries/create
-    // (has a real integer id), not a client-fabricated object.
     const handlePaymentSuccess = (entry) => {
         setActiveEntry(entry);
         setShowPaymentModal(false);
         setCurrentPage("typing");
-        // Refresh so the dashboard's entry list includes this new row too.
         refreshUser();
     };
 
     const handleTypingComplete = async (result) => {
-        // The actual save already happened inside TypingPage via
-        // /api/entries/complete. Just refetch the real state from the
-        // database instead of guessing/mutating local state.
         await refreshUser();
         setCurrentPage("dashboard");
     };

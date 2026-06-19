@@ -8,18 +8,21 @@ export default function AuthCallbackPage({ onAuthSuccess }) {
         const email = params.get("email");
 
         if (userId && name && email) {
-            onAuthSuccess({
-                id: userId,
-                name: decodeURIComponent(name),
-                email: decodeURIComponent(email),
-                entries: [],
-            });
+            onAuthSuccess({ id: parseInt(userId), name, email });
+        } else {
+            // If no params, redirect to home
+            window.location.href = "/";
         }
-    }, []);
+    }, [onAuthSuccess]);
 
     return (
-        <div style={{ textAlign: "center", marginTop: "4rem" }}>
-            <p>Signing you in…</p>
+        <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh"
+        }}>
+            <p>Logging you in...</p>
         </div>
     );
 }

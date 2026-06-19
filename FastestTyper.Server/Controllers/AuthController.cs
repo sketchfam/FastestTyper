@@ -39,7 +39,6 @@ namespace FastestTyper.Server.Controllers
             var name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value ?? "";
             var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value ?? "";
 
-            // Find or create user
             var user = await _db.Users.FirstOrDefaultAsync(u => u.GoogleId == googleId);
             if (user == null)
             {
@@ -48,9 +47,9 @@ namespace FastestTyper.Server.Controllers
                 await _db.SaveChangesAsync();
             }
 
-            // Redirect to frontend with user info
+            var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "http://localhost:5173";
             var query = $"?userId={user.Id}&name={Uri.EscapeDataString(name)}&email={Uri.EscapeDataString(email)}";
-            return Redirect($"http://localhost:5173/auth-callback{query}");
+            return Redirect($"{frontendUrl}/auth-callback{query}");
         }
 
         [HttpGet("me")]
@@ -67,7 +66,6 @@ namespace FastestTyper.Server.Controllers
 
             if (user == null) return NotFound();
 
-            // Map entries to avoid null serialization issues
             var entries = user.Entries.Select(e => new
             {
                 e.Id,

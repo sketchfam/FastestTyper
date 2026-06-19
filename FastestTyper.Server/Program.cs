@@ -99,10 +99,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("ViteDev", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy.WithOrigins(
+            "http://localhost:5173",
+            "https://fastesttyper-frontend.onrender.com"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
@@ -120,6 +123,13 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("ViteDev");
+
+// Force HTTPS scheme for OAuth
+app.Use((context, next) =>
+{
+    context.Request.Scheme = "https";
+    return next();
+});
 
 app.UseAuthentication();
 

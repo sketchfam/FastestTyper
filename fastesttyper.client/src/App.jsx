@@ -8,6 +8,8 @@ import Navbar from "./components/Navbar";
 import PaymentModal from "./components/PaymentModal";
 import "./styles/globals.css";
 
+const API_URL = import.meta.env.VITE_API_URL || "";
+
 export default function App() {
     const [currentPage, setCurrentPage] = useState("home");
     const [user, setUser] = useState(null);
@@ -26,7 +28,7 @@ export default function App() {
         if (window.location.pathname === "/auth-callback") return;
         (async () => {
             try {
-                const res = await fetch("/api/auth/me", { credentials: "include" });
+                const res = await fetch(`${API_URL}/api/auth/me`, { credentials: "include" });
                 if (res.ok) {
                     const data = await res.json();
                     setUser(data);
@@ -40,7 +42,7 @@ export default function App() {
 
     const refreshUser = async () => {
         try {
-            const res = await fetch("/api/auth/me", { credentials: "include" });
+            const res = await fetch(`${API_URL}/api/auth/me`, { credentials: "include" });
             if (!res.ok) return;
             const data = await res.json();
             setUser(data);
@@ -57,14 +59,14 @@ export default function App() {
     };
 
     const handleLogout = async () => {
-        await fetch("/api/auth/logout", { method: "POST" });
+        await fetch(`${API_URL}/api/auth/logout`, { method: "POST" });
         setUser(null);
         setCurrentPage("home");
     };
 
     const handleEnterCompetition = () => {
         if (!user) {
-            window.location.href = "/api/auth/login/google";
+            window.location.href = `${API_URL}/api/auth/login/google`;
         } else {
             setShowPaymentModal(true);
         }
@@ -91,8 +93,8 @@ export default function App() {
         <div className="app">
             <Navbar
                 user={user}
-                onLogin={() => { window.location.href = "/api/auth/login/google"; }}
-                onSignup={() => { window.location.href = "/api/auth/login/google"; }}
+                onLogin={() => { window.location.href = `${API_URL}/api/auth/login/google`; }}
+                onSignup={() => { window.location.href = `${API_URL}/api/auth/login/google`; }}
                 onLogout={handleLogout}
                 navigate={navigate}
                 currentPage={currentPage}

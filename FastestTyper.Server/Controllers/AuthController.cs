@@ -21,9 +21,10 @@ namespace FastestTyper.Server.Controllers
         [HttpGet("login/google")]
         public IActionResult LoginWithGoogle()
         {
+            var backendUrl = Environment.GetEnvironmentVariable("BACKEND_URL") ?? "https://localhost:7185";
             var props = new AuthenticationProperties
             {
-                RedirectUri = "/api/auth/callback/google"
+                RedirectUri = $"{backendUrl}/api/auth/callback/google"
             };
             return Challenge(props, "Google");
         }

@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import "./PaymentModal.css";
 
+const API_URL = import.meta.env.VITE_API_URL || "";
+
 export default function PaymentModal({ onSuccess, onClose, user }) {
     const [step, setStep] = useState("confirm"); // confirm | processing | done
     const [entryId] = useState(() => `entry_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`);
@@ -32,9 +34,10 @@ export default function PaymentModal({ onSuccess, onClose, user }) {
         if (!container || container.children.length > 0) return;
 
         const createOrderFn = async () => {
-            const res = await fetch("/api/paypal/create-order", {
+            const res = await fetch(`${API_URL}/api/paypal/create-order`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({ entryId }),
             });
             const data = await res.json();
@@ -44,8 +47,9 @@ export default function PaymentModal({ onSuccess, onClose, user }) {
         const onApproveFn = async (data) => {
             setStep("processing");
             try {
-                const res = await fetch(`/api/paypal/capture-order/${data.orderID}`, {
+                const res = await fetch(`${API_URL}/api/paypal/capture-order/${data.orderID}`, {
                     method: "POST",
+                    credentials: "include",
                 });
                 const order = await res.json();
                 console.log("Captured:", order);
@@ -53,7 +57,7 @@ export default function PaymentModal({ onSuccess, onClose, user }) {
                 // Payment is confirmed — now create the REAL entry row in the database.
                 // This is the step that was missing: everything downstream needs the
                 // real integer Id this returns, not the client-generated string above.
-                const entryRes = await fetch("/api/entries/create", {
+                const entryRes = await fetch(`${API_URL}/api/entries/create`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     credentials: "include",

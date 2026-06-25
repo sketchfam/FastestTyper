@@ -77,13 +77,17 @@ public class PayPalController : ControllerBase
         var token = await GetAccessToken();
         var client = _http.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
         var response = await client.PostAsync(
             $"https://api-m.sandbox.paypal.com/v2/checkout/orders/{orderId}/capture",
             new StringContent("{}", Encoding.UTF8, "application/json")
         );
         var json = await response.Content.ReadAsStringAsync();
-        return Content(json, "application/json");
+        return new ContentResult
+        {
+            Content = json,
+            ContentType = "application/json",
+            StatusCode = (int)response.StatusCode
+        };
     }
 }
 

@@ -48,6 +48,9 @@ namespace FastestTyper.Server.Controllers
                 await _db.SaveChangesAsync();
             }
 
+            // *** IMPORTANT: Persist the authentication cookie for future requests ***
+            await HttpContext.SignInAsync("Cookies", result.Principal);
+
             var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "http://localhost:5173";
             var query = $"?userId={user.Id}&name={Uri.EscapeDataString(name)}&email={Uri.EscapeDataString(email)}";
             return Redirect($"{frontendUrl}/auth-callback{query}");

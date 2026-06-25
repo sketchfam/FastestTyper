@@ -11,7 +11,7 @@ export default function PaymentModal({ onSuccess, onClose, user }) {
 
     // ── Load PayPal SDK script ───────────────────────────────
     useEffect(() => {
-        if (initializedRef.current) return; // guards against StrictMode double-invoke in dev
+        if (initializedRef.current) return;
         initializedRef.current = true;
 
         if (window.paypal) {
@@ -20,12 +20,11 @@ export default function PaymentModal({ onSuccess, onClose, user }) {
         }
 
         const script = document.createElement("script");
-        script.src = "https://www.paypal.com/sdk/js?client-id=AUdrmWSBQl1fjiTAZM5X8akET98ivKOQiEtVcHHvgOl7qTqNgSSR8sHQq1Mk_KHPyMykkIBQqE3sfblE&currency=USD&disable-funding=venmo";
+        script.src = "https://www.paypal.com/sdk/js?client-id=AUdrmWSBQl1fjiTAZM5X8akET98ivKOQiEtVcHHvgOl7qTqNgSSR8sHQq1Mk_KHPyMykkIBQqE3sfblE&currency=USD&disable-funding=venmo&disable-fastlane=true";
+        script.setAttribute("data-fastlane-enabled", "false");
         script.async = true;
         script.onload = () => renderPayPalButton();
         document.body.appendChild(script);
-
-        // Intentionally no cleanup that removes the script — see prior fix notes.
     }, []);
 
     const renderPayPalButton = () => {

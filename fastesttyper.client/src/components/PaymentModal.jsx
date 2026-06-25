@@ -11,7 +11,7 @@ export default function PaymentModal({ onSuccess, onClose, user }) {
 
     // ── Load PayPal SDK script ───────────────────────────────
     useEffect(() => {
-        if (initializedRef.current) return;
+        if (initializedRef.current) return; // guards against StrictMode double-invoke in dev
         initializedRef.current = true;
 
         if (window.paypal) {
@@ -20,11 +20,13 @@ export default function PaymentModal({ onSuccess, onClose, user }) {
         }
 
         const script = document.createElement("script");
-        script.src = "https://www.paypal.com/sdk/js?client-id=AUdrmWSBQl1fjiTAZM5X8akET98ivKOQiEtVcHHvgOl7qTqNgSSR8sHQq1Mk_KHPyMykkIBQqE3sfblE&currency=USD&disable-funding=venmo&disable-fastlane=true";
-        script.setAttribute("data-fastlane-enabled", "false");
+        // Use the original script URL without disable-fastlane param
+        script.src = "https://www.paypal.com/sdk/js?client-id=AUdrmWSBQl1fjiTAZM5X8akET98ivKOQiEtVcHHvgOl7qTqNgSSR8sHQq1Mk_KHPyMykkIBQqE3sfblE&currency=USD&disable-funding=venmo";
         script.async = true;
         script.onload = () => renderPayPalButton();
         document.body.appendChild(script);
+
+        // No cleanup needed
     }, []);
 
     const renderPayPalButton = () => {
@@ -54,8 +56,6 @@ export default function PaymentModal({ onSuccess, onClose, user }) {
                 console.log("Captured:", order);
 
                 // Payment is confirmed — now create the REAL entry row in the database.
-                // This is the step that was missing: everything downstream needs the
-                // real integer Id this returns, not the client-generated string above.
                 const entryRes = await fetch(`${API_URL}/api/entries/create`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -80,20 +80,26 @@ export default function PaymentModal({ onSuccess, onClose, user }) {
             }
         };
 
-        // Card button first (primary)
+        // Card button first (primary) with disableFastlane style
         window.paypal.Buttons({
             fundingSource: window.paypal.FUNDING.CARD,
             createOrder: createOrderFn,
             onApprove: onApproveFn,
             onError: (err) => { console.error("PayPal error:", err); alert("Payment failed. Please try again."); },
+            style: {
+                disableFastlane: true
+            }
         }).render("#paypal-button-container");
 
-        // PayPal button second
+        // PayPal button second with disableFastlane style
         window.paypal.Buttons({
             fundingSource: window.paypal.FUNDING.PAYPAL,
             createOrder: createOrderFn,
             onApprove: onApproveFn,
             onError: (err) => { console.error("PayPal error:", err); alert("Payment failed. Please try again."); },
+            style: {
+                disableFastlane: true
+            }
         }).render("#paypal-button-container");
     };
 

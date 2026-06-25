@@ -25,9 +25,10 @@ builder.Services.AddAuthentication(options =>
 {
     options.Cookie.Name = "FastestTyper.Auth";
     options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SameSite = SameSiteMode.None;   // Changed from Lax
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.Domain = ".onrender.com";   
+    options.Cookie.Domain = ".onrender.com";
+    options.Cookie.Path = "/";                     // Add this
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
     options.SlidingExpiration = true;
 
